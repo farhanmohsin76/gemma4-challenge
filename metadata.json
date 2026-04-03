@@ -1,0 +1,7 @@
+{
+  "name": "MedGemma HAI-DEF  for the Gemma 4 Challenge",
+  "description": "Health AI Diagnostic Evaluation Framework powered by MedGemma 1.5 for grounded medical reasoning and diagnostic support.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
