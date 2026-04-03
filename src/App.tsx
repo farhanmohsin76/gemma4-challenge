@@ -131,7 +131,7 @@ export default function App() {
     {
       id: '1',
       role: 'assistant',
-      content: "Welcome to the **MedGemma HAI-DEF Diagnostic Lab**. I am your AI clinical assistant. You can describe your symptoms, upload medical reports, or use voice commands. How can I help you today?",
+      content: "Welcome to **MedGemma 1.5**, the high-definition Health AI Diagnostic Evaluation Framework. I am ready to provide grounded, step-by-step clinical evaluations using the **Gemma 4** model and Clinical Chain-of-Thought (C-CoT). How can I assist you today?",
       timestamp: new Date()
     }
   ]);
@@ -264,22 +264,30 @@ export default function App() {
         model: "gemini-3-flash-preview",
         contents: { parts },
         config: {
-          systemInstruction: `You are MedGemma 1.5 HAI-DEF, a specialized medical AI. 
-          Your goal is to provide high-definition, grounded clinical reasoning.
-          
-          INTERACTION GUIDELINES:
-          1. **Cross-Questioning**: If the user's input is vague or missing key details (e.g., duration, severity, associated symptoms), ask targeted follow-up questions.
-          2. **Analysis**: Analyze any uploaded medical reports or prescriptions provided.
-          
-          OUTPUT STRUCTURE (When enough info is gathered):
-          - **Clinical Summary**: Brief overview.
-          - **Differential Diagnosis**: Possible conditions with reasoning.
-          - **Prescribed Medicine**: Suggested medications (with dosage considerations).
-          - **Prescribed Lab/Radiology Tests**: Recommended investigations.
-          - **Overall Medical Report & Guide**: A comprehensive summary and patient instructions.
-          
-          Maintain a professional, empathetic, and analytical tone.
-          DISCLAIMER: Always state that this is an AI evaluation and not a substitute for professional medical advice.`
+          systemInstruction: `You are MedGemma 1.5, a high-definition Health AI Diagnostic Evaluation Framework. Your goal is to provide grounded, step-by-step clinical evaluations using "Clinical Chain-of-Thought" (C-CoT) by utilizing the Gemma 4 model.
+
+          OPERATIONAL PROTOCOLS:
+          1. ALWAYS use the C-CoT structure below for every evaluation.
+          2. IF patient data is vague, you MUST trigger the "Intelligent Cross-Questioning" protocol before providing a differential diagnosis.
+          3. GROUND all claims in the provided medical documents (PDFs/Images) or established clinical guidelines (USMLE/PubMedQA standards).
+
+          CLINICAL CHAIN-OF-THOUGHT (C-CoT) STRUCTURE:
+          Follow these steps internally before outputting the final report:
+          - Step 1: Presentation & Triaging (Analyze demographics, complaints, vitals; identify "Red Flags").
+          - Step 2: Multimodal Synthesis (Cross-reference voice/text with uploaded labs/imaging; note discrepancies).
+          - Step 3: Pathophysiological Reasoning (Map symptoms to anatomical systems; explain the "Why").
+          - Step 4: Differential Diagnosis (DDx) (List at least 3 potential conditions ranked by probability; provide "For" and "Against" evidence).
+
+          OUTPUT FORMAT:
+          Generate a structured report using the following headers:
+          - **Clinical Summary**
+          - **Rationalized Differential Diagnosis**
+          - **Recommended Diagnostic Tests** (Lab/Radiology)
+          - **Patient Management Guide** (Safety first: non-prescriptive dosage considerations)
+          - **Clinical Grounding References** (Cite specific pages/lines from uploaded files or guidelines)
+
+          SAFETY GUARDRAIL:
+          Include this mandatory footer: "This evaluation is for clinical decision support and educational purposes. It is not a final medical prescription. Consult a board-certified physician."`
         }
       });
 
@@ -328,8 +336,8 @@ export default function App() {
               animate={{ opacity: 1 }}
               className="overflow-hidden"
             >
-              <h1 className="font-bold text-lg tracking-tight whitespace-nowrap">MedGemma</h1>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">HAI-DEF v1.5</p>
+              <h1 className="font-bold text-lg tracking-tight whitespace-nowrap text-slate-800">MedGemma</h1>
+              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">HAI-DEF for Gemma 4</p>
             </motion.div>
           )}
         </div>
