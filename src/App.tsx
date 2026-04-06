@@ -210,7 +210,12 @@ export default function App() {
   const playVoiceResponse = async (text: string) => {
     if (!isVoiceEnabled) return;
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        console.error("GEMINI_API_KEY is missing for TTS.");
+        return;
+      }
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash-preview-tts",
         contents: [{ parts: [{ text: text.slice(0, 500) }] }], // Limit text for TTS
@@ -250,7 +255,11 @@ export default function App() {
     setIsTyping(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error("GEMINI_API_KEY is missing. Please configure it in the Secrets panel.");
+      }
+      const ai = new GoogleGenAI({ apiKey });
       
       const parts: any[] = [];
       if (input) parts.push({ text: input });
@@ -307,10 +316,11 @@ export default function App() {
       }
     } catch (error) {
       console.error("Error calling Gemini:", error);
+      const errorMessage = error instanceof Error ? error.message : "I encountered an error processing the request.";
       setMessages(prev => [...prev, {
         id: 'error',
         role: 'assistant',
-        content: "I'm sorry, I'm having trouble connecting to the medical knowledge base right now.",
+        content: `**System Error**: ${errorMessage}\n\nPlease ensure your **GEMINI_API_KEY** is correctly configured in the Secrets panel.`,
         timestamp: new Date()
       }]);
     } finally {
